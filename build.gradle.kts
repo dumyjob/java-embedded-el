@@ -17,7 +17,7 @@ repositories {
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
     version.set("2022.2.5")
-    type.set("IU") // Target IDE Platform
+    type.set("IC") // Target IDE Platform
 
     plugins.set(listOf("java"))
 }
@@ -35,6 +35,11 @@ tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = "17"
     }
+
+    withType<org.jetbrains.intellij.tasks.RunIdeTask> {
+        jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005")
+    }
+
 
     patchPluginXml {
         sinceBuild.set("222")
