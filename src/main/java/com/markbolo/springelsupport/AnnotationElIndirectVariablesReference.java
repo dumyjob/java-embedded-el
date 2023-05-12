@@ -11,9 +11,9 @@ public class AnnotationElIndirectVariablesReference extends AnnotationElVariable
 
 
 
-    public AnnotationElIndirectVariablesReference(final PsiAnnotationMemberValue annotationMemberValue, final TextRange textRange,
+    public AnnotationElIndirectVariablesReference(final PsiElement psiElement, final TextRange textRange,
                                                   final String val, final PsiClass psiClass) {
-        super(annotationMemberValue,textRange);
+        super(psiElement,textRange);
         this.elExpressionFragment = val;
         this.psiClass = psiClass;
     }
