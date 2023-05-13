@@ -1,4 +1,4 @@
-package com.markbolo.springelsupport;
+package com.markbolo.springelsupport.references;
 
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.diagnostic.Logger;

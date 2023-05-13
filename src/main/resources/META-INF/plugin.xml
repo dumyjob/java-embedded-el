@@ -28,7 +28,10 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <psi.referenceContributor language="JAVA"
-                                  implementation="com.markbolo.springelsupport.AnnotationElReferencesContributor"/>
+                                  implementation="com.markbolo.springelsupport.references.AnnotationElReferencesContributor"/>
+
+        <lang.findUsagesProvider language="JAVA"
+                                 implementationClass="com.markbolo.springelsupport.findusages.AnnotationFindUsageProvider"/>
     </extensions>
 
 <!--    <extensions defaultExtensionNs="com.intellij.javaee.el">-->

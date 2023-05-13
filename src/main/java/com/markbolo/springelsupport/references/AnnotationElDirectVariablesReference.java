@@ -1,4 +1,4 @@
-package com.markbolo.springelsupport;
+package com.markbolo.springelsupport.references;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -32,8 +32,7 @@ public class AnnotationElDirectVariablesReference extends AnnotationElVariablesR
             }
         }
 
-        // TODO 如何debug ?目前看起来是没找到被引用的对象
-        return psiParameterList.getParameters()[0];
+        return null;
     }
 
     @Override

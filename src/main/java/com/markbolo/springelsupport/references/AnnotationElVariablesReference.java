@@ -1,4 +1,4 @@
-package com.markbolo.springelsupport;
+package com.markbolo.springelsupport.references;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiClass;
