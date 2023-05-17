@@ -2,6 +2,7 @@ package com.markbolo.springelsupport.references;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class AnnotationElIndirectVariablesReference extends AnnotationElVariablesReference {
@@ -25,7 +26,7 @@ public class AnnotationElIndirectVariablesReference extends AnnotationElVariable
         final PsiField[] psiFields =  psiClass.getAllFields();
         for(PsiField psiField : psiFields){
             if(elExpressionFragment.equals(psiField.getName())){
-                return psiField;
+                return psiField.getNameIdentifier();
             }
         }
 
@@ -43,5 +44,10 @@ public class AnnotationElIndirectVariablesReference extends AnnotationElVariable
             return psiClassType.resolve(); // 对应的PsiClass对象
         }
         return null;
+    }
+
+    @Override
+    public boolean isReferenceTo(@NotNull final PsiElement element) {
+        return super.isReferenceTo(element);
     }
 }

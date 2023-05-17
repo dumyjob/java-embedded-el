@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class AnnotationElVariablesReference extends PsiReferenceBase<PsiElement> {
 
-
     public AnnotationElVariablesReference(@NotNull final PsiElement element, final TextRange rangeInElement, final boolean soft) {
         super(element, rangeInElement, soft);
     }

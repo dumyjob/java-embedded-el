@@ -47,4 +47,9 @@ public class AnnotationElDirectVariablesReference extends AnnotationElVariablesR
         }
         return null;
     }
+
+    @Override
+    public boolean isReferenceTo(@NotNull final PsiElement element) {
+        return super.isReferenceTo(element);
+    }
 }
