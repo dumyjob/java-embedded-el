@@ -39,7 +39,6 @@ public class AnnotationElReferencesContributor extends PsiReferenceContributor {
             PsiLiteralExpression psiLiteralExpression  = (PsiLiteralExpression) element;
             PsiAnnotation annotation = getPsiAnnotation(psiLiteralExpression);
             // 判断annotation中的方法是否有@Language("SpEL")注解,如果有则表示value值需要被解析为el表达式,同时找到对应的declaration
-            List<PsiReference> references = new ArrayList<>();
             if (!isAnnotatedOnMethod(annotation)
                     || !isSpELLanguage(annotation, getNameValuePair(psiLiteralExpression))) {
                 // 非@Lanaguage标记的方法
@@ -51,20 +50,23 @@ public class AnnotationElReferencesContributor extends PsiReferenceContributor {
             final String elExpression = psiLiteralExpression.getText();
             // el表达式切割
             final String[] values = elExpression.split("\\.");
-            AnnotationElVariablesReference prev = null;
+
+            List<PsiReference> references = new ArrayList<>();
+            ElReference prev = null;
             for (String val : values) {
-                final AnnotationElVariablesReference reference;
+                final ElReference reference;
                 // el表达式 #开头
                 final String strVal = val.replace("#", "")
-                        .replace("\"","");
+                        .replace("\"", "");
                 int start = elExpression.indexOf(strVal);
                 TextRange property = new TextRange(start, start + strVal.length());
+
                 if (prev == null) {
-                    reference = new AnnotationElDirectVariablesReference(element, property,
-                            strVal,  getAnnotatedMethod(annotation));
-                } else if (prev.resolveClass() != null) {
-                    reference = new AnnotationElIndirectVariablesReference(element, property,
-                            strVal, prev.resolveClass());
+                    reference = new ElMethodParamReference(element, property,
+                            strVal, getAnnotatedMethod(annotation));
+                } else if (prev.referencedClass() != null) {
+                    reference = new ElBeanFieldReference(element, property,
+                            strVal, prev.referencedClass());
                 } else {
                     reference = null;
                 }

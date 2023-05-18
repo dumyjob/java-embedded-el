@@ -3,40 +3,48 @@ package com.markbolo.springelsupport.references;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class AnnotationElDirectVariablesReference extends AnnotationElVariablesReference {
+public class ElMethodParamReference extends  ElReference {
+
 
     private final String elExpressionFragment;
     private final PsiMethod annotationOwner;
 
-    public AnnotationElDirectVariablesReference(@NotNull final PsiElement element,
-                                                final TextRange textRange,
-                                                final String value,
-                                                final PsiMethod owner) {
-        super(element,textRange);
-        this.elExpressionFragment = value;
-        this.annotationOwner = owner;
+    public ElMethodParamReference(@NotNull final PsiElement element, final TextRange range,
+                                  final String elExpressionFragment, final PsiMethod annotationOwner) {
+        super(element, range);
+        this.elExpressionFragment = elExpressionFragment;
+        this.annotationOwner = annotationOwner;
     }
 
-
-
     @Override
-    public @Nullable PsiElement resolve() {
+    public ResolveResult @NotNull [] multiResolve(final boolean incompleteCode) {
         // el表达式中的第一个直接引用方法上的参数
         PsiParameterList psiParameterList =  annotationOwner.getParameterList();
         for(PsiParameter psiParameter : psiParameterList.getParameters()){
             if(elExpressionFragment.equals(psiParameter.getName())){
                 // 如果el表达式指向到方法的参数
-                return psiParameter;
+                return new ResolveResult[]{new PsiElementResolveResult(psiParameter)};
             }
         }
 
-        return null;
+        return new ResolveResult[0];
+    }
+
+    @NotNull
+    @Override
+    public Object @NotNull [] getVariants() {
+        return new Object[0];
+    }
+
+
+    @Override
+    public boolean isSoft() {
+        return false;
     }
 
     @Override
-    PsiClass resolveClass() {
+    public PsiClass referencedClass() {
         final PsiParameter psiParameter = (PsiParameter) resolve();
         if(psiParameter == null ) {
             return null;
@@ -46,10 +54,5 @@ public class AnnotationElDirectVariablesReference extends AnnotationElVariablesR
             return psiClassType.resolve(); // 对应的PsiClass对象
         }
         return null;
-    }
-
-    @Override
-    public boolean isReferenceTo(@NotNull final PsiElement element) {
-        return super.isReferenceTo(element);
     }
 }
