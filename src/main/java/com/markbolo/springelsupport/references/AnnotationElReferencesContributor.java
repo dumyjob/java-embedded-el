@@ -1,13 +1,10 @@
 package com.markbolo.springelsupport.references;
 
-import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ProcessingContext;
-import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -37,10 +34,10 @@ public class AnnotationElReferencesContributor extends PsiReferenceContributor {
                                                                @NotNull ProcessingContext context) {
 
             PsiLiteralExpression psiLiteralExpression  = (PsiLiteralExpression) element;
-            PsiAnnotation annotation = getPsiAnnotation(psiLiteralExpression);
+            PsiAnnotation annotation = AnnotationUtils.getPsiAnnotation(psiLiteralExpression);
             // 判断annotation中的方法是否有@Language("SpEL")注解,如果有则表示value值需要被解析为el表达式,同时找到对应的declaration
-            if (!isAnnotatedOnMethod(annotation)
-                    || !isSpELLanguage(annotation, getNameValuePair(psiLiteralExpression))) {
+            if (!AnnotationUtils.isAnnotatedOnMethod(annotation)
+                    || !AnnotationUtils.isSpELLanguage(annotation, AnnotationUtils.getNameValuePair(psiLiteralExpression))) {
                 // 非@Lanaguage标记的方法
                 return PsiReference.EMPTY_ARRAY;
             }
@@ -63,7 +60,7 @@ public class AnnotationElReferencesContributor extends PsiReferenceContributor {
 
                 if (prev == null) {
                     reference = new ElMethodParamReference(element, property,
-                            strVal, getAnnotatedMethod(annotation));
+                            strVal, AnnotationUtils.getAnnotatedMethod(annotation));
                 } else if (prev.referencedClass() != null) {
                     reference = new ElBeanFieldReference(element, property,
                             strVal, prev.referencedClass());
@@ -77,77 +74,6 @@ public class AnnotationElReferencesContributor extends PsiReferenceContributor {
             return references.isEmpty() ? PsiReference.EMPTY_ARRAY : references.toArray(PsiReference[]::new);
         }
 
-        private static PsiNameValuePair getNameValuePair(final PsiLiteralExpression psiLiteralExpression) {
-            final PsiElement parent = psiLiteralExpression.getParent();
-            if (parent instanceof PsiNameValuePair psiNameValuePair) {
-                return psiNameValuePair;
-            } else {
-                return (PsiNameValuePair) parent.getParent();
-            }
-        }
 
-        private PsiAnnotation getPsiAnnotation(final PsiLiteralExpression psiLiteralExpression) {
-            // 如果是数组的value， 会比单个value的多一级 PsiNameValuePair -> {PsiArrayInitializerMemberValue} ->  PsiLiteralExpression
-            final PsiElement parent = psiLiteralExpression.getParent();
-            if (parent instanceof PsiNameValuePair) {
-                // 单个
-                return (PsiAnnotation) parent
-                        .getParent()
-                        .getParent();
-            } else {
-                // 数组value
-                return (PsiAnnotation) parent
-                        .getParent()
-                        .getParent()
-                        .getParent();
-            }
-        }
-
-
-        public boolean isAnnotatedOnMethod(final PsiAnnotation psiAnnotation){
-            PsiAnnotationOwner owner = psiAnnotation.getOwner();
-            if(!(owner instanceof PsiModifierList)){
-                return false;
-            }
-            // 不是method上的注解
-            return ((PsiModifierList) owner).getParent() instanceof PsiMethod;
-        }
-
-        public PsiMethod getAnnotatedMethod(final PsiAnnotation psiAnnotation){
-           if(isAnnotatedOnMethod(psiAnnotation)){
-               return (PsiMethod) psiAnnotation.getParent().getParent();
-           }
-
-           return null;
-        }
-
-
-        /**
-         * 判断是否有 @Language("SpEL")
-         *
-         * @see com.intellij.psi.impl.PsiImplUtil#findAttributeValue 找到annotation注解定义
-         */
-        private boolean isSpELLanguage(final PsiAnnotation annotation, final PsiNameValuePair attribute) {
-            final PsiJavaCodeReferenceElement referenceElement = annotation.getNameReferenceElement();
-            if (referenceElement == null) {
-                return false;
-            }
-
-            // PsiAnnotation引用的annotation注解定义
-            PsiElement resolved = referenceElement.resolve();
-            if (resolved == null) {
-                return false;
-            }
-            PsiMethod[] methods = ((PsiClass) resolved).findMethodsByName(attribute.getAttributeName(), false);
-            for (PsiMethod method : methods) {
-                if (PsiUtil.isAnnotationMethod(method)) {
-                    PsiAnnotation languageAnnotation = AnnotationUtil.findAnnotation(method, Language.class.getName());
-                    if (languageAnnotation != null) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
     }
 }

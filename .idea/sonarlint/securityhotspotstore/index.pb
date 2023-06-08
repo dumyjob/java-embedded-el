@@ -12,5 +12,11 @@ X
 gradlew,5\b\5bbfa66edb4db3c7c33c5181f43510990d3307f9
 C
 settings.gradle.kts,7\4\749edfcc96398253e5b3416184e95c46621da850
+Å
+Qsrc/main/java/com/markbolo/springelsupport/references/ElMethodParamReference.java,e\e\ee7516f4e2ec87418ba8143943ebe69d2ccf559d
+v
+Fsrc/main/java/com/markbolo/springelsupport/references/ElReference.java,5\7\57b2ba16eccb064a45a7515fbc635c411ac4afc6
 @
 build.gradle.kts,d\b\dbcff70658daf80b53ce624f6adcaa529df5ed8d
+
+Osrc/main/java/com/markbolo/springelsupport/references/ElBeanFieldReference.java,a\3\a3caa842f681710cac45897a8858ae5e71cfa82a
