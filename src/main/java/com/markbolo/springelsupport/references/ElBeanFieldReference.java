@@ -31,6 +31,7 @@ public class ElBeanFieldReference  extends ElReference {
         return new ResolveResult[]{new PsiElementResolveResult(psiField)};
     }
 
+
     @NotNull
     @Override
     public Object @NotNull [] getVariants() {

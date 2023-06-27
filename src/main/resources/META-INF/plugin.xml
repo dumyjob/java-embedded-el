@@ -32,6 +32,8 @@
 
         <referencesSearch implementation="com.markbolo.springelsupport.references.ElFieldReferenceSearch"/>
 
+<!--        <lang.findUsagesProvider language="JAVA"-->
+<!--                                 implementationClass="com.markbolo.springelsupport.findusages.AnnotationFindUsageProvider"/>-->
     </extensions>
 
 <!--    <extensions defaultExtensionNs="com.intellij.javaee.el">-->
