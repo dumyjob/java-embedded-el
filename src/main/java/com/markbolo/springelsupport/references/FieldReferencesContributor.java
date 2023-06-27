@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class FieldReferencesContributor extends PsiReferenceContributor {
 
     private static final Logger LOGGER = Logger.getInstance(FieldReferencesContributor.class);

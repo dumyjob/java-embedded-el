@@ -3,6 +3,7 @@ package com.markbolo.springelsupport.references;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
 public class FieldReference extends PsiPolyVariantReferenceBase<PsiElement> {
 
 
